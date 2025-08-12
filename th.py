@@ -1,4 +1,3 @@
-
 import os
 import sys
 from datetime import datetime
@@ -7,11 +6,11 @@ quant_standard = 10
 quant_premium = 5
 quant_luxo = 3
 quant_reservas = 0
-reservas_totais = 0
+soma_reservas = 0
 maior_quant_reservas = 0
 nome_reserva_cara = ""
+nome_maior_tempo = ""
 maior_tempo_reserva = 0
-nome_maior_tempo_reserva = ""
 
 print("1 - Nova Reserva:")
 print("2 - Sair")
@@ -34,17 +33,26 @@ while (opção == 1):
         print("Erro! Não há como a data de Check-in ser maior que a de Check-out")
         sys.exit()
     diferença_dia = data - data2
+    diárias = diferença_dia.days
+    if diárias > maior_tempo_reserva:
+        maior_tempo_reserva = diárias
+        nome_maior_reserva = nome
+
     os.system("clear")
 
-    diárias = int(input("Digite a quantidade de diárias: "))
-    os.system("clear")
+    diárias = diferença_dia.days
+    if diárias > maior_tempo_reserva:
+        maior_tempo_reserva = diárias
+        nome_maior_tempo = nome
+
 
     print("Quantidades de quartos disponíveis;")
     print()
     print("Quartos Standard:", quant_standard)
     print("quartos Premium:", quant_premium)
     print("Quartos Luxo:", quant_luxo)
-    
+    print()
+
     quarto = int(input("""Digite o tipo de quarto que deseja:
 (1) para Standard
 (2) para Premium
@@ -52,6 +60,43 @@ while (opção == 1):
     os.system("clear")
 
     if quarto == 1:
+        quant_quartos = int(input("Digite a quantidade de quartos Standard que você deseja:"))
+        quant_standard -= quant_quartos
+        if quant_standard == 0:
+            print("Não temos mais essa quantidade de quartos Standard disponíveis")
+        else:
+            if quant_quartos > maior_quant_reservas:
+                nome_reserva_cara = nome
+                valor_diária = diárias * 100
+                soma_reservas += valor_diária
+
+
+    elif quarto == 2:
+        quant_quartos = int(input("Digite a quantidade de quartos Premium que você deseja:"))
+        quant_premium -= quant_quartos
+        if quant_premium == 0:
+            print("Não temos mais essa quantidade de quartos Premium disponíveis")
+        else:
+            if quant_quartos > maior_quant_reservas:
+                nome_reserva_cara = nome
+                valor_diária = diárias * 180
+                soma_reservas += valor_diária    
+
+    elif quarto == 3:
+        quant_quartos = int(input("Digite a quantidade de quartos Luxo que você deseja:"))    
+        quant_luxo -= quant_quartos
+        if quant_luxo == 0:        
+            print("Não temos mais essa quantidade de quartos Luxo disponíveis")
+        else:
+            if quant_quartos > maior_quant_reservas:
+                nome_reserva_cara = nome
+                valor_diária = diárias * 250
+                soma_reservas += valor_diária
+
+    else:        
+
+
+
 
 
 
