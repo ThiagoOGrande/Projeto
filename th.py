@@ -73,32 +73,31 @@ Quarto escolhido: """))
         quantidade_quartos = int(input('Qual a quantidade de quartos standard você quer: '))
         disp_st -= quantidade_quartos
         if disp_st < 0:
-            print('Não temos essa quantidade de quantos disponíveis para esse quarto')
+            print("Não temos essa quantidade de quartos disponíveis para esse quarto")
         else:
             if quantidade_quartos > maior_reservas:
                 maior_reservas = quantidade_quartos
                 nome_reserva_mais_cara = nome
-                valor_dias = (quant_dias * 100) * quantidade_quartos
-                total_reservas += valor_dias
+            valor_dias = (quant_dias * 100) * quantidade_quartos
+            total_reservas += valor_dias
     
     
     elif quarto == 2:
         quantidade_quartos = int(input('Qual a quantidade de quartos premium você quer: '))
         disp_pr -= quantidade_quartos
-        if disp_st < 0:
-            print('Não temos essa quantidade de quantos disponíveis para esse quarto')
+        if disp_pr < 0:
+            print('Não temos essa quantidade de quartos disponíveis para esse quarto')
         else:
             if quantidade_quartos > maior_reservas:
                 maior_reservas = quantidade_quartos
                 nome_reserva_mais_cara = nome
-
-        valor_dias = (quant_dias * 180) * quantidade_quartos
-        total_reservas += valor_dias
+            valor_dias = (quant_dias * 180) * quantidade_quartos
+            total_reservas += valor_dias
 
     elif quarto == 3:
         quantidade_quartos = int(input('Qual a quantidade de quartos luxo você quer: '))
         disp_lu -= quantidade_quartos
-        if disp_st < 0:
+        if disp_lu < 0:
             print('Não temos essa quantidade de quartos disponíveis para esse quarto')
         else:
             if quantidade_quartos > maior_reservas:
@@ -106,6 +105,7 @@ Quarto escolhido: """))
                 nome_reserva_mais_cara = nome
             valor_dias = (quant_dias * 250) * quantidade_quartos
             total_reservas += valor_dias
+               
     else:
         print('Escolha um tipo de quarto possível')
     reservas += 1
@@ -116,8 +116,9 @@ else:
 
 if reservas >= 1:
     print(f"O número de reservas realizadas foram: {reservas}")
-    print(f"Soma das reservas: {total_reservas}")
-    print(f"A maior quantida de tempo foi de {maior_tempo} dias. E o responsavel foi {nome_maior_tempo}")
-    print(f"Média de reservas = {media_reservas}")
-    print(f"Maior valor de reservas = {maior_reservas}")
-    print(f"Responsável por reserva mais cara: {nome_reserva_mais_cara}")
+    print(f"Soma total do valor das reservas: {total_reservas} reais")
+    print(f"A maior quantidade de tempo de uma reserva foi de {maior_tempo} dias. E o responsavel foi {nome_maior_tempo}")
+    print(f"Valor médio das reservas: {media_reservas} reais")
+    print(f"Maior quantidade de dias de uma reserva: {maior_reservas} dias")
+    print(f"Responsável por reserva mais cara: {nome_reserva_mais_cara}, {total_reservas} reais")
+    
