@@ -11,9 +11,9 @@ def mostrar_menu():
           2 - Carregar reservas já existentes
           3 - Consultar disponibilidade
           4 - Cancelar reserva
-          5- Listar reservas
-          6- Exibir estatísticas gerais
-          7- Sair''')
+          5 - Listar reservas
+          6 - Exibir estatísticas gerais
+          7 - Sair''')
     print()
 
 '''
@@ -28,9 +28,14 @@ reservas = [
     ]
 '''
     
+valor_quartos = {'Standard': 100,
+                 'Premium': 180,
+                 'Luxo': 250}    
+
 total_quartos = {'Standard': 10,
                  'Premium': 5,
                  'Luxo': 3}
+
 reservas = []
 total_reservas = 0
 maior_reservas = 0
@@ -43,22 +48,44 @@ agenda_telefonica = {"joao": 2345678, "Maria": 345678}
 def data():
     formato = "%d/%m/%Y"
     check_in = input("Digite a data de Check-In (No modelo dd/mm/aaaa): ")
+    #try:
+     #   check_in = datetime.strptime(check_in, formato).date()
+    #except ValueError:  
+     #   print("Data de Check-In inválida!")  
+      #  quit()
     check_in = datetime.strptime(check_in, formato).date()
     check_out = input("Digite a data de Check-Out (No modelo dd/mm/aaaa): ")
+    #try: 
+      #  check_out = datetime.strptime(check_out, formato).date()
+    #except ValueError:
+     #   print("Data de Check-Out inválida!")
+      #  quit()    
     check_out = datetime.strptime(check_out, formato).date()
+    
+def quartos():
+    print("Digite qual dos quartos listados abaixo você gostaria: ")    
+    print('''
+          1 - Standard
+          2 - Premium
+          3 - Luxo
+          ''')
+    quarto = input(": ")
+    if quarto == 1:
+        print("Standard")
     
 
 def consultar_disponibilidade(checkin, checkout, tipo_quarto, quantidade_quartos):  
     print("Iremos consultar a disponibilidade...")
-    for r in reservas:
+    for r in reservas:check_out = datetime.strptime(check_out, formato).date()
         if r['tipo_quarto'] == tipo_quarto:
             if checkin < r['checkout'] and checkout > r['checkin']:
-                quartos_consumidos += r['quantidade_quartos']    
+                quartos_consumidos += r['quantidade_quartos'] 
+
 
 def cadastrar_reserva():
     while True: 
        print()
-       print("Cadastre uma nova reserva: ")
+       print("Cadastre uma nocheck_out = datetime.strptime(check_out, formato).date()va reserva: ")
        nome = input("Digite o nome do responsável pela reserva: ").strip() 
        if nome == "":
           print("Nome inválido!")
@@ -67,7 +94,7 @@ def cadastrar_reserva():
        data()
        break
     mostrar_menu()
-    
+    quartos()
        
 
 
@@ -95,7 +122,7 @@ def listar_reservas():
 
 def sair():   
     print()
-    print("Valeu pela preferência vei, vole sempre!")  
+    print("Muito obrigado pela preferẽncia, vole sempre!")  
 
 def main():
     while True:
@@ -124,8 +151,3 @@ def main():
     
         
 main()  
-
-
-
-
-
