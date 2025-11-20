@@ -4,17 +4,8 @@ import sys
 import time
 from datetime import datetime 
 
-def mostrar_menu():
-    print("O que você deseja fazer? ")
-    print('''
-          1 - Cadastrar nova reserva:
-          2 - Carregar reservas já existentes
-          3 - Consultar disponibilidade
-          4 - Cancelar reserva
-          5 - Listar reservas
-          6 - Exibir estatísticas gerais
-          7 - Sair''')
-    print()
+reservas = []
+nome_arquivo = "reservas.pkl"
 
 '''
 reservas = [
@@ -36,14 +27,53 @@ total_quartos = {'Standard': 10,
                  'Premium': 5,
                  'Luxo': 3}
 
-reservas = []
-total_reservas = 0
-maior_reservas = 0
-nome_reserva_cara = ""
-nome_tempo_maior = ""
-maior_tempo = 0
-nome_arquivo = "reservas.pkl"
-agenda_telefonica = {"joao": 2345678, "Maria": 345678}
+
+def carregar_reservas():
+    try:
+        with open (nome_arquivo, "rb") as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        return {}
+
+def salvar_reservas():
+    with open (nome_arquivo, "wb") as f:
+        pickle.dump(reservas, f)        
+
+def exibir_estatisticas():
+    print("\n Carregando para exibir as estatísticas gerais das reservas, aguarde alguns instantes...")
+    todas_reservas = len(reservas)        
+
+def cancelar_reservas():
+    buscar_nome = input("\n Digite o nome do responsável pela reserva que desejas cancelar: ").lower()
+    for r in (reservas):
+        if r ["responsável"] == [buscar_nome]:
+            print (r)
+            data_hoje = datetime.today()
+            if r["check_in"] == [data_hoje]:
+                reservas.remove(r)
+            else:
+                print("\n Não foi possível cancelar esta reserva, tente novamente em alguns instantes...")
+                time.sleep(3)    
+
+def listar_reservas():
+
+
+
+
+def mostrar_menu():
+    print("O que você deseja fazer? ")
+    print('''
+          1 - Cadastrar nova reserva:
+          2 - Carregar reservas já existentes
+          3 - Consultar disponibilidade
+          4 - Cancelar reserva
+          5 - Listar reservas
+          6 - Exibir estatísticas gerais
+          7 - Sair''')
+    print()
+
+
+
 
 def data():
     formato = "%d/%m/%Y"
@@ -95,30 +125,9 @@ def cadastrar_reserva():
        break
     mostrar_menu()
     quartos()
-       
+    
 
-
-
-def carregar_reservas():
-    with open(nome_arquivo, "r") as f:
-        dados_carregados = pickle.load(f)
-        return dados_carregados
-
-def cancelar_reserva():
-    print()
-    print("Cancelar reservas: ")
-
-def salvar_dados():
-    with open(nome_arquivo, "wb") as f:
-        pickle.dump(agenda_telefonica, f)
-
-def exibir_estatisticas():
-    print()
-    print("Calcular estatísticas: ")    
-
-def listar_reservas():
-    print()
-    print("Listar as reservas já existentes: ")    
+    
 
 def sair():   
     print()
