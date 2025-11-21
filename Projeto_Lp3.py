@@ -9,6 +9,19 @@ nome_arquivo = "reservas.pkl"
 quartos_disponíveis = {"standard": 10, "premium": 5, "luxo": 3}
 
 
+def carregar_reservas():
+    try:
+        with open (nome_arquivo, "rb") as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        return {}
+
+def salvar_reservas():
+    global reservas
+    with open (nome_arquivo, "wb") as f:
+        pickle.dump(reservas, f)        
+ 
+
 def mostrar_menu():
     print("\nO que você deseja fazer? ")
     print('''
@@ -22,129 +35,6 @@ def mostrar_menu():
     print()
     opçao = int(input(": "))
     return opçao
-
-
-def carregar_reservas():
-    try:
-        with open (nome_arquivo, "rb") as f:
-            return pickle.load(f)
-    except FileNotFoundError:
-        return {}
-
-def salvar_reservas():
-    global reservas
-    with open (nome_arquivo, "wb") as f:
-        pickle.dump(reservas, f)        
-
-
-def exibir_estatisticas():
-    print("\n Carregando para exibir as estatísticas gerais, aguarde alguns instantes...")
-    time.sleep(3)
-    print(f"\n RESERVAS: {len(reservas)} \n")  
-    quantidade_standard = 0
-    quantidade_premium = 0
-    quantidade_luxo = 0   
-    reserva_mais_cara = 0
-    responsavel_reserva_mais_cara = ""
-    valor_total_reservas = 0
-    maior_quantidade_dias = 0
-    responsavel_mais_dias = ""
-
-    for r in (reservas):
-        if r["tipo_de_quarto"] == "standard":
-            valor_quarto = 100
-        elif r["tipo_de_quarto"] == "premium":
-            valor_quarto = 180
-        else:
-            valor_quarto = 250      
-        valor_reserva = r["quantidade_quartos"] * r["tipo_de_quarto"] * valor_quarto      
-        if r["tipo_de_quarto"] == "standard":
-            quantidade_standard += r["quantidade_quartos"]
-        elif r["tipo_de_quarto"] == "premium":
-            quantidade_premium += r["quantidade_quartos"]
-        else:
-            quantidade_luxo += r["quantidade_quartos"]   
-        valor_total_reservas += valor_reserva
-        if valor_reserva > reserva_mais_cara:
-            reserva_mais_cara = valor_reserva
-            responsavel_reserva_mais_cara = r["responsável"]
-        if r["quantidade_dias"] > maior_quantidade_dias:    
-            maior_quantidade_dias = r["quantidade_dias"]
-            responsavel_mais_dias = r["responsável"]
-
-    print(f"\n Valor total das reservas: {valor_total_reservas}")    
-    print(f"\n Reserva mais cara: {reserva_mais_cara} \n Responsável pela reserva mais cara: {responsavel_reserva_mais_cara}")    
-    print(f"\n Quantidade de dias da reserva mais longa: {maior_quantidade_dias} \n Responsável pela reserva mais longa: {responsavel_mais_dias}")
-    print(f"\n Quantidade de quartos Standard: {quantidade_standard} \n Quantidade de quartos Premium: {quantidade_premium} \n Quantidade de quartos Luxo: {quantidade_luxo}")
-     
-    sair = int(input("\n  Digite [1] para sair: "))
-    if sair == 1:
-        return   
-    
-
-
-def cancelar_reservas():
-    buscar_nome = input("\n Digite o nome do responsável pela reserva que desejas cancelar: ").lower()
-    cont = 0
-    for r in (reservas):
-        if r ["responsável"] == [buscar_nome]:
-            cont += 1
-            print(f"\n Nome: {r["responsável"]} \n Check-in: {r["checkin"]} \n Check-out: {r["checkout"]} \n Tipo de quarto: {r["tipo_de_quarto"]} \n Quantidade de quartos: {r["quantidade_quartos"]} \n Dias de reserva: {r["quantidade_dias"]} ")
-            cancelar = int(input("\n Deseja continuar e cancelar a reserva? \n [1] - Sim \n [2] - Não"))
-            if cancelar == 2:
-                return
-            else:    
-                data_atual = datetime.today()
-                if r["checkin"] > data_atual:
-                    reservas.remove(r)
-                    print("\n A reserva foi cancelada com êxito!")
-                else:
-                    print("\n Não foi possível cancelar esta reserva, a data de Check-in já passou.")    
-    if cont == 0:
-        print("\nNão existem reservas com este nome.")
-    sair = int(input("\n  Digite [1] para sair: "))
-    if sair == 1:
-        return   
-
-
-def listar_reservas(a):
-    reservas = carregar_reservas()
-    print("\nTodas as reservas já cadastradas: ")
-    for r in (reservas):
-            print(f"\n Nome: {r["responsável"]} \n Check-in: {r["checkin"]} \n Check-out: {r["checkout"]} \n Tipo de quarto: {r["tipo_de_quarto"]} \n Quantidade de quartos: {r["quantidade_quartos"]} \n Dias de reserva: {r["quantidade_dias"]} ")
-    sair = int(input("\n  Digite [1] para sair: "))
-    if sair == 1:
-        return   
-
-def consultar_disponibilidade(checkin, checkout, tipo_quarto, quantidade_quartos):  
-    quartos_reservados = 0
-    print("Iremos consultar a disponibilidade...")
-    for r in (reservas):
-        if r["tipo_de_quarto"] == tipo_quarto:
-            if checkin < r["checkout"] and checkout > r["checkin"]:
-                quartos_reservados += r["quantidade_quartos"]  
-    global disponibilidade
-    disponibilidade = quartos_disponíveis[tipo_quarto] - quartos_reservados
-    if quantidade_quartos > disponibilidade:
-        return False
-    else:
-        return True     
-        
-
-def consultar_reservas():
-    buscar_nome = input("\nDigite o nome do responsável pela reserva que desejas consultar: ").lower()
-    nome_encontrado = 0
-    for r in (reservas):
-        if r ["responsável"] == [buscar_nome]:
-            print("\nReserva: ")
-            print(f"\n Nome: {r["responsável"]} \n Check-in: {r["checkin"]} \n Check-out: {r["checkout"]} \n Tipo de quarto: {r["tipo_de_quarto"]} \n Quantidade de quartos: {r["quantidade_quartos"]} \n Quantidade de dias de reserva: {r["quantidade_dias"]} ")
-            nome_encontrado += 1
-    if nome_encontrado == 0:
-        print("\n  Não existem reservas com este nome, tente outro! ")       
-        time.sleep(3) 
-    sair = int(input("\n  Digite [1] para sair: "))
-    if sair == 1:
-        return   
 
 
 def cadastrar_reserva(): 
@@ -200,6 +90,7 @@ def cadastrar_reserva():
             break    
         else:
             print("\n  Esse tipo de quarto não existe! Escolha um dos tipos mencionados.")
+            return
 
     while True:
         quantidade_quartos = int(input("\nDigite a quantidade de quartos desejados: "))  
@@ -212,7 +103,129 @@ def cadastrar_reserva():
         else:
             print(f"\n  Nesse perídodo de tempo, temos apenas {quartos_disponíveis}. ")
 
-    
+    salvar_reservas()        
+
+
+def consultar_reservas():
+    carregar_reservas()
+    buscar_nome = input("\nDigite o nome do responsável pela reserva que desejas consultar: ").lower()
+    nome_encontrado = 0
+    for r in (reservas):
+        if r ["responsável"] == [buscar_nome]:
+            print("\nReserva: ")
+            print(f"\n Nome: {r["responsável"]} \n Check-in: {r["checkin"]} \n Check-out: {r["checkout"]} \n Tipo de quarto: {r["tipo_de_quarto"]} \n Quantidade de quartos: {r["quantidade_quartos"]} \n Quantidade de dias de reserva: {r["quantidade_dias"]} ")
+            nome_encontrado += 1
+    if nome_encontrado == 0:
+        print("\n  Não existem reservas com este nome, tente outro! ")       
+        time.sleep(3) 
+        return
+    sair = int(input("\n  Digite [1] para sair: "))
+    if sair == 1:
+        return   
+
+
+def consultar_disponibilidade(checkin, checkout, tipo_quarto, quantidade_quartos):  
+    carregar_reservas()
+    quartos_reservados = 0
+    print("\nIremos consultar a disponibilidade...")
+    for r in (reservas):
+        if r["tipo_de_quarto"] == tipo_quarto:
+            if checkin < r["checkout"] and checkout > r["checkin"]:
+                quartos_reservados += r["quantidade_quartos"]  
+    global disponibilidade
+    disponibilidade = quartos_disponíveis[tipo_quarto] - quartos_reservados
+    if quantidade_quartos > disponibilidade:
+        print("\nNão temo essa quantidade de quartos disponíveis.")
+        return False
+    else:
+        return True            
+  
+ 
+def cancelar_reservas():
+    carregar_reservas()
+    buscar_nome = input("\n Digite o nome do responsável pela reserva que desejas cancelar: ").lower()
+    cont = 0
+    for r in (reservas):
+        if r ["responsável"] == [buscar_nome]:
+            cont += 1
+            print(f"\n Nome: {r["responsável"]} \n Check-in: {r["checkin"]} \n Check-out: {r["checkout"]} \n Tipo de quarto: {r["tipo_de_quarto"]} \n Quantidade de quartos: {r["quantidade_quartos"]} \n Dias de reserva: {r["quantidade_dias"]} ")
+            cancelar = int(input("\n Deseja continuar e cancelar a reserva? \n [1] - Sim \n [2] - Não"))
+            if cancelar == 2:
+                return
+            else:    
+                data_atual = datetime.today()
+                if r["checkin"] > data_atual:
+                    reservas.remove(r)
+                    print("\n A reserva foi cancelada com êxito!")
+                else:
+                    print("\n Não foi possível cancelar esta reserva, a data de Check-in já passou.")    
+    if cont == 0:
+        print("\nNão existem reservas com este nome, tente outro!")
+        time.sleep(3)
+        return
+    sair = int(input("\n  Digite [1] para sair: "))
+    if sair == 1:
+        return   
+
+    salvar_reservas()    
+
+
+def listar_reservas(l):
+    reservas = carregar_reservas()
+    print("\nTodas as reservas já cadastradas: ")
+    for r in (reservas):
+            print(f"\n Nome: {r["responsável"]} \n Check-in: {r["checkin"]} \n Check-out: {r["checkout"]} \n Tipo de quarto: {r["tipo_de_quarto"]} \n Quantidade de quartos: {r["quantidade_quartos"]} \n Dias de reserva: {r["quantidade_dias"]} ")
+    sair = int(input("\n  Digite [1] para sair: "))
+    if sair == 1:
+        return   
+
+
+def exibir_estatisticas():
+    carregar_reservas()
+    print("\n Carregando para exibir as estatísticas gerais, aguarde alguns instantes...")
+    time.sleep(3)
+    print(f"\n RESERVAS: {len(reservas)} \n")  
+    quantidade_standard = 0
+    quantidade_premium = 0
+    quantidade_luxo = 0   
+    reserva_mais_cara = 0
+    responsavel_reserva_mais_cara = ""
+    valor_total_reservas = 0
+    maior_quantidade_dias = 0
+    responsavel_mais_dias = ""
+
+    for r in (reservas):
+        if r["tipo_de_quarto"] == "standard":
+            valor_quarto = 100
+        elif r["tipo_de_quarto"] == "premium":
+            valor_quarto = 180
+        else:
+            valor_quarto = 250      
+        valor_reserva = r["quantidade_quartos"] * r["tipo_de_quarto"] * valor_quarto      
+        if r["tipo_de_quarto"] == "standard":
+            quantidade_standard += r["quantidade_quartos"]
+        elif r["tipo_de_quarto"] == "premium":
+            quantidade_premium += r["quantidade_quartos"]
+        else:
+            quantidade_luxo += r["quantidade_quartos"]   
+        valor_total_reservas += valor_reserva
+        if valor_reserva > reserva_mais_cara:
+            reserva_mais_cara = valor_reserva
+            responsavel_reserva_mais_cara = r["responsável"]
+        if r["quantidade_dias"] > maior_quantidade_dias:    
+            maior_quantidade_dias = r["quantidade_dias"]
+            responsavel_mais_dias = r["responsável"]
+
+    print(f"\n Valor total das reservas: {valor_total_reservas}")    
+    print(f"\n Reserva mais cara: {reserva_mais_cara} \n Responsável pela reserva mais cara: {responsavel_reserva_mais_cara}")    
+    print(f"\n Quantidade de dias da reserva mais longa: {maior_quantidade_dias} \n Responsável pela reserva mais longa: {responsavel_mais_dias}")
+    print(f"\n Quantidade de quartos Standard: {quantidade_standard} \n Quantidade de quartos Premium: {quantidade_premium} \n Quantidade de quartos Luxo: {quantidade_luxo}")
+     
+    sair = int(input("\n  Digite [1] para sair: "))
+    if sair == 1:
+        return 
+
+
 def sair():   
     print("\n Agradecemos pela preferẽncia, volte sempre!") 
     salvar_reservas()
@@ -228,9 +241,9 @@ def main():
         elif opçao == 2:
             consultar_reservas()  
         elif opçao == 3:
-            consultar_disponibilidade()
+            consultar_disponibilidade(checkin, checkout, tipo_quarto, quantidade_quartos)
         elif opçao == 4:
-            cancelar_reserva()     
+            cancelar_reservas()     
         elif opçao == 5:
             listar_reservas(reservas)
         elif opçao == 6:
@@ -242,7 +255,7 @@ def main():
             print("Essa opçao não existe! Tente novamente.")
             time.sleep(2)
         time.sleep(3)
-        #os.system("clear")
+        os.system('clear')
 
 
 main()  
