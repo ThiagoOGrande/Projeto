@@ -71,8 +71,8 @@ def exibir_reserva(r):
     dias_reservados = (r["checkout"] - r["checkin"]).days
     print(f"""
     Responsável: {r['responsavel']}
-    Check-in: {r['checkin'].strptime("%d/%m/%Y")}
-    Check-out: {r['checkout'].strptime("%d/%m/%Y")}
+    Check-in: {r['checkin'].strftime("%d/%m/%Y")}
+    Check-out: {r['checkout'].strftime("%d/%m/%Y")}
     Dias reservados: {dias_reservados}
     Tipo de quarto: {r['tipo_quarto']}
     Quantidade de quartos: {r['quantidade_quartos']}
