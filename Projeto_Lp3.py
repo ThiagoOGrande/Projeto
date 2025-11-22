@@ -9,7 +9,8 @@ reservas = []
 nome_arquivo = "reservas.pkl"
 DISPONIBILIDADE_QUARTOS = {"standard": 10, "premium": 5, "luxo": 3}
 VALORES_QUARTOS = {"standard": 100, "premium": 180, "luxo": 250}
-
+hoje = date.today()
+data_formatada = hoje.strftime("%d/%m/%Y")
 
 
 #Funções carregar e salvar reservas:
@@ -175,7 +176,7 @@ def consultar_disponibilidade():
     checkout = ler_data("Digite a data de check-out: ")
 
     tipo_quarto = input("\nDigite o tipo de quarto: ").lower()
-    if tipo not in DISPONIBILIDADE_QUARTOS:
+    if tipo_quarto not in DISPONIBILIDADE_QUARTOS:
         print("Tipo de quarto inválido. Escolha um dos tipos existentes.")
         return
 
@@ -196,7 +197,7 @@ def consultar_disponibilidade():
 
 def cancelar_reservas():
     buscar_nome = input("\n Digite o nome do responsável pela reserva que desejas cancelar: ").lower()
-    nome_encontrado = [r for r in reservas if buscar_nome in r["responsavel"] and r["checkin"] > date.today()]
+    nome_encontrado = [r for r in reservas if buscar_nome in r["responsavel"] and r["checkin"] > data_formatada]
 
     if not nome_encontrado:
         print("Não existem reservas com este nome, tente outro!.")
@@ -306,6 +307,5 @@ def main():
             time.sleep(2)
         time.sleep(3)
         limpar_tela()
-
 
 main()  
