@@ -4,7 +4,6 @@ import sys
 import time
 from datetime import datetime 
 
-
 reservas = []
 nome_arquivo = "reservas.pkl"
 DISPONIBILIDADE_QUARTOS = {"standard": 10, "premium": 5, "luxo": 3}
