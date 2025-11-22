@@ -277,7 +277,7 @@ def exibir_estatisticas():
 
 def sair():   
     salvar_reservas()
-    print("\n Agradecemos pela preferẽncia, volte sempre!") 
+    print("\n Agradecemos pela preferência, volte sempre!") 
 
 
 
